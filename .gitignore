@@ -1,0 +1,20 @@
+# Secrets / env
+.env
+*.env
+
+# Config with credentials
+config/config.local.php
+
+# Runtime uploads
+/uploads/*
+
+# Composer / npm
+/vendor/
+/node_modules/
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
