@@ -1,12 +1,18 @@
 <?php
 /**
  * Shared page <head> + fixed header.
- * Expects (optional): $pageTitle, $metaDescription, $ogImage, $active
+ * Expects (optional): $pageTitle, $metaDescription, $ogImage, $ogType, $canonical, $robots, $active, $schemaJson
  */
-$pageTitle       = $pageTitle       ?? 'Xposed — 9 Years Live. No Filter. All In.';
-$metaDescription = $metaDescription ?? 'Xposed (Cody) — Twitch & Kick partner, 541K+ on YouTube. Watch live, catch the latest uploads, and go behind the reel.';
+$pageTitle       = $pageTitle       ?? config('seo.default_title');
+$metaDescription = $metaDescription ?? config('seo.default_description');
 $ogImage         = $ogImage         ?? '';
+$ogType          = $ogType          ?? 'website';
+$canonical       = $canonical       ?? canonical_url();
+$robots          = $robots          ?? 'index,follow';
 $active          = $active          ?? '';
+$schemaJson      = $schemaJson      ?? null;
+$prevUrl         = $prevUrl         ?? '';
+$nextUrl         = $nextUrl         ?? '';
 
 $isLive = setting('is_live', '0') === '1';
 
@@ -21,6 +27,7 @@ $navLinks = [
 ];
 
 $cartCount = array_sum(array_column($_SESSION['cart'] ?? [], 'qty'));
+$siteName = config('seo.site_name');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,14 +36,42 @@ $cartCount = array_sum(array_column($_SESSION['cart'] ?? [], 'qty'));
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= e($pageTitle) ?></title>
 <meta name="description" content="<?= e($metaDescription) ?>">
+<meta name="robots" content="<?= e($robots) ?>">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="canonical" href="<?= e($canonical) ?>">
+<?php if ($prevUrl): ?><link rel="prev" href="<?= e($prevUrl) ?>"><?php endif; ?>
+<?php if ($nextUrl): ?><link rel="next" href="<?= e($nextUrl) ?>"><?php endif; ?>
+<link rel="icon" href="<?= e(url('assets/favicon.ico')) ?>" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="<?= e(url('assets/android-chrome-192x192.png')) ?>">
+<link rel="icon" type="image/png" sizes="512x512" href="<?= e(url('assets/android-chrome-512x512.png')) ?>">
+<link rel="apple-touch-icon" href="<?= e(url('assets/apple-touch-icon.png')) ?>">
 
 <!-- Open Graph / Twitter -->
+<meta property="og:site_name" content="<?= e($siteName) ?>">
 <meta property="og:title" content="<?= e($pageTitle) ?>">
 <meta property="og:description" content="<?= e($metaDescription) ?>">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Xposed">
-<?php if ($ogImage): ?><meta property="og:image" content="<?= e($ogImage) ?>"><?php endif; ?>
+<meta property="og:type" content="<?= e($ogType) ?>">
+<meta property="og:url" content="<?= e($canonical) ?>">
+<meta property="og:locale" content="<?= e(config('seo.locale')) ?>">
+<?php $shareImage = $ogImage !== '' ? absolute_url($ogImage) : default_og_image(); ?>
+<meta property="og:image" content="<?= e($shareImage) ?>">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="<?= e(config('seo.twitter_handle')) ?>">
+<meta name="twitter:title" content="<?= e($pageTitle) ?>">
+<meta name="twitter:description" content="<?= e($metaDescription) ?>">
+<meta name="twitter:image" content="<?= e($shareImage) ?>">
+<?php if ($ogType === 'article'): ?>
+<meta property="article:published_time" content="<?= e($publishedTime ?? '') ?>">
+<meta property="article:modified_time" content="<?= e($publishedTime ?? '') ?>">
+<?php endif; ?>
+<?php if ($ogType === 'product'): ?>
+<meta property="product:price:amount" content="<?= e($productPrice ?? '') ?>">
+<meta property="product:price:currency" content="<?= e($productPriceCurrency ?? '') ?>">
+<?php endif; ?>
+
+<?php if ($schemaJson): ?>
+<script type="application/ld+json"><?= json_encode($schemaJson, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
+<?php endif; ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

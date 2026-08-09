@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle       = 'Checkout — Xposed Store';
 $metaDescription = 'Complete your Xposed order.';
+$robots = 'noindex, nofollow';
 $active = 'store';
 include __DIR__ . '/app/views/partials/header.php';
 ?>

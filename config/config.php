@@ -46,6 +46,16 @@ return [
     'business_email' => 'businessxposed@gmail.com',
     'site_url'       => rtrim(getenv('XPOSED_SITE_URL') ?: '', '/'),
 
+    // SEO + social-sharing defaults (override via env / admin later).
+    'seo' => [
+        'site_name'          => 'Xposed',
+        'default_title'      => 'Xposed — 9 Years Live. No Filter. All In.',
+        'default_description' => 'Xposed (Cody) — Twitch & Kick partner, 541K+ on YouTube. Watch live, catch the latest uploads, and go behind the reel.',
+        'og_image'           => rtrim(getenv('XPOSED_OG_IMAGE') ?: '/assets/Cody-image.jpg', '/'),
+        'twitter_handle'     => getenv('XPOSED_TWITTER_HANDLE') ?: '@Xposed',
+        'locale'             => 'en_US',
+    ],
+
     // Kick channel + embed targets (embed spec can change — verify at build).
     'kick' => [
         'channel' => 'xposed',

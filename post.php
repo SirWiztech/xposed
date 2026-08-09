@@ -23,6 +23,26 @@ $body = Post::renderBody((string)$post['body']);
 $pageTitle       = $post['title'] . ' — Xposed Blog';
 $metaDescription = mb_substr(strip_tags($post['excerpt'] ?: ''), 0, 150);
 $active = 'blog';
+$ogType = 'article';
+$publishedTime = date('c', strtotime((string)$post['published_at']));
+if (!empty($post['cover_image'])) {
+    $ogImage = $post['cover_image'];
+}
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@type'    => 'Article',
+    'headline' => $post['title'],
+    'description' => mb_substr(strip_tags($post['excerpt'] ?: ''), 0, 200),
+    'datePublished' => $publishedTime,
+    'dateModified'  => $publishedTime,
+    'image'   => !empty($post['cover_image']) ? absolute_url($post['cover_image']) : default_og_image(),
+    'author'  => ['@type' => 'Organization', 'name' => 'Xposed'],
+    'publisher' => ['@type' => 'Organization', 'name' => 'Xposed',
+        'logo' => ['@type' => 'ImageObject', 'url' => absolute_url('assets/image-removebg-preview%20(7).png')]],
+    'mainEntityOfPage' => canonical_url(),
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 

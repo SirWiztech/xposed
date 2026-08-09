@@ -10,6 +10,7 @@ $order = Order::findByRef($ref);
 
 $pageTitle       = 'Order confirmed — Xposed Store';
 $metaDescription = 'Your Xposed order confirmation.';
+$robots = 'noindex, nofollow';
 $active = 'store';
 include __DIR__ . '/app/views/partials/header.php';
 ?>

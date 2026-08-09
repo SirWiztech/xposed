@@ -1,5 +1,12 @@
 # XPOSED — root access rules (additive; no rewrite rules that alter routing)
 
+# Serve robots.txt / sitemap.xml from their dynamic PHP generators.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+</IfModule>
+
 # Block direct web access to secret/dot files (.env etc.)
 <IfModule mod_authz_core.c>
   <FilesMatch "^\.env">

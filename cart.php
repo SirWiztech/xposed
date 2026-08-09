@@ -21,6 +21,7 @@ $total = cart_total_cents();
 
 $pageTitle       = 'Cart — Xposed Store';
 $metaDescription = 'Your Xposed cart.';
+$robots = 'noindex, nofollow';
 $active = 'store';
 include __DIR__ . '/app/views/partials/header.php';
 ?>

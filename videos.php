@@ -15,6 +15,35 @@ $page = min($page, $data['pages']);
 $pageTitle       = 'Videos — Xposed';
 $metaDescription = 'The full Xposed upload archive — session recaps, high multipliers, and everything in between.';
 $active = 'videos';
+
+if ($page > 1) {
+    $prevUrl = absolute_url('videos.php' . ($page > 2 ? '?page=' . ($page - 1) : ''));
+}
+if ($page < $data['pages']) {
+    $nextUrl = absolute_url('videos.php?page=' . ($page + 1));
+}
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@type'    => 'ItemList',
+    'name'     => 'Xposed videos',
+    'url'      => canonical_url(),
+    'itemListElement' => array_map(function ($v, $i) {
+        return [
+            '@type'     => 'ListItem',
+            'position'  => $i + 1,
+            'item'      => [
+                '@type'        => 'VideoObject',
+                'name'         => $v['title'],
+                'description'  => mb_substr(strip_tags($v['description'] ?? ''), 0, 200),
+                'thumbnailUrl' => $v['thumb'] ?? '',
+                'uploadDate'   => date('Y-m-d', strtotime((string)$v['published_at'])),
+                'contentUrl'   => $v['youtube_id'] ? 'https://www.youtube.com/watch?v=' . $v['youtube_id'] : '',
+            ],
+        ];
+    }, $data['items'], array_keys($data['items'])),
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 

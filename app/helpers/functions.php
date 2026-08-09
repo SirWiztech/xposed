@@ -36,6 +36,55 @@ function url(string $path = ''): string
     return $base . '/' . ltrim($path, '/');
 }
 
+/**
+ * Build an absolute URL (scheme + host + base path).
+ * Uses config('site_url') when set; otherwise falls back to the request host.
+ */
+function absolute_url(string $path = ''): string
+{
+    if ($path === '' || preg_match('~^(?:https?:|//)~i', $path)) {
+        return $path;
+    }
+    $base = config('site_url');
+    if ($base === '') {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $base = $scheme . '://' . $host . rtrim(config('app.base_url'), '/');
+    }
+    $base = rtrim($base, '/');
+    return $base . '/' . ltrim($path, '/');
+}
+
+/**
+ * Canonical URL for the current request.
+ * Strips the configured base-path prefix from the request URI, then rebuilds
+ * an absolute URL (so localhost subfolder + production root both work).
+ */
+function canonical_url(): string
+{
+    $uri  = $_SERVER['REQUEST_URI'] ?? '/';
+    $path = parse_url($uri, PHP_URL_PATH) ?: '/';
+    $query = parse_url($uri, PHP_URL_QUERY) ?? '';
+
+    $basePath = rtrim(config('app.base_url'), '/');
+    if ($basePath !== '' && str_starts_with($path, $basePath)) {
+        $path = substr($path, strlen($basePath));
+    }
+    $path = ($path === '' || $path[0] !== '/') ? '/' . $path : $path;
+
+    $canonical = absolute_url($path);
+    if ($query !== '') {
+        $canonical .= '?' . $query;
+    }
+    return $canonical;
+}
+
+/** Default social-share image (absolute URL). */
+function default_og_image(): string
+{
+    return absolute_url((string)config('seo.og_image'));
+}
+
 function redirect(string $path): void
 {
     header('Location: ' . url($path));

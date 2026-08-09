@@ -47,6 +47,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 $pageTitle       = $product['name'] . ' — Xposed Store';
 $metaDescription = mb_substr(strip_tags($product['description'] ?? ''), 0, 150);
 $active = 'store';
+$ogType = 'product';
+$productPrice = number_format((int)$product['price_cents'] / 100, 2, '.', '');
+$productPriceCurrency = strtoupper((string)($product['currency'] ?? 'CAD'));
+if (!empty($product['image'])) {
+    $ogImage = $product['image'];
+}
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@type'    => 'Product',
+    'name'         => $product['name'],
+    'description'  => mb_substr(strip_tags($product['description'] ?? ''), 0, 200),
+    'image'        => !empty($product['image']) ? absolute_url($product['image']) : default_og_image(),
+    'category'     => $product['category'] ?: null,
+    'offers'       => [
+        '@type'         => 'Offer',
+        'price'         => number_format((int)$product['price_cents'] / 100, 2, '.', ''),
+        'priceCurrency' => $productPriceCurrency,
+        'availability'  => 'https://schema.org/InStock',
+        'url'           => canonical_url(),
+    ],
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 

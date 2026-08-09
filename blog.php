@@ -12,6 +12,28 @@ $page = min($page, $data['pages']);
 $pageTitle       = 'Blog — Xposed';
 $metaDescription = 'Notes from nine years live — stream logs, mindset, and the stuff behind the highlights.';
 $active = 'blog';
+
+if ($page > 1) {
+    $prevUrl = absolute_url('blog.php' . ($page > 2 ? '?page=' . ($page - 1) : ''));
+}
+if ($page < $data['pages']) {
+    $nextUrl = absolute_url('blog.php?page=' . ($page + 1));
+}
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@type'    => 'ItemList',
+    'name'     => 'Xposed blog',
+    'url'      => canonical_url(),
+    'itemListElement' => array_map(function ($p, $i) {
+        return [
+            '@type'    => 'ListItem',
+            'position' => $i + 1,
+            'url'      => absolute_url('post.php?slug=' . rawurlencode((string)$p['slug'])),
+        ];
+    }, $data['items'], array_keys($data['items'])),
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 

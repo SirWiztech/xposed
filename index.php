@@ -21,6 +21,36 @@ $latestVideoTitle = $videos[0]['title'] ?? 'Latest upload';
 
 $active = 'home';
 
+$socials = [
+    ['label' => 'Kick',       'handle' => 'kick.com/xposed',    'url' => 'https://kick.com/xposed',    'icon' => 'kick',      'primary' => true],
+    ['label' => 'Twitch',     'handle' => 'twitch.tv/xposed',    'url' => 'https://twitch.tv/xposed',   'icon' => 'twitch'],
+    ['label' => 'YouTube',    'handle' => '@XposedLIVE',         'url' => 'https://youtube.com/@XposedLIVE', 'icon' => 'youtube'],
+    ['label' => 'TikTok',     'handle' => '@xposedhq',           'url' => 'https://tiktok.com/@xposedhq', 'icon' => 'tiktok'],
+    ['label' => 'Twitter/X',  'handle' => '@Xposed',             'url' => 'https://twitter.com/Xposed', 'icon' => 'x'],
+    ['label' => 'Instagram',  'handle' => '@Xposed',             'url' => 'https://instagram.com/Xposed', 'icon' => 'instagram'],
+];
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@graph' => [
+        [
+            '@type'       => 'Organization',
+            '@id'         => canonical_url() . '#organization',
+            'name'        => 'Xposed',
+            'url'         => canonical_url(),
+            'logo'        => absolute_url('assets/image-removebg-preview%20(7).png'),
+            'sameAs'      => array_column($socials, 'url'),
+        ],
+        [
+            '@type'       => 'WebSite',
+            '@id'         => canonical_url() . '#website',
+            'url'         => canonical_url(),
+            'name'        => 'Xposed',
+            'publisher'   => ['@id' => canonical_url() . '#organization'],
+        ],
+    ],
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 

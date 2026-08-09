@@ -12,6 +12,21 @@ $categories = Product::categories();
 $pageTitle       = 'Store — Xposed';
 $metaDescription = 'Xposed merch and digital tools — apparel, bankroll trackers and more.';
 $active = 'store';
+
+$schemaJson = [
+    '@context' => 'https://schema.org',
+    '@type'    => 'ItemList',
+    'name'     => 'Xposed store',
+    'url'      => canonical_url(),
+    'itemListElement' => array_map(function ($p, $i) {
+        return [
+            '@type'    => 'ListItem',
+            'position' => $i + 1,
+            'url'      => absolute_url('product.php?id=' . (int)$p['id']),
+        ];
+    }, $products, array_keys($products)),
+];
+
 include __DIR__ . '/app/views/partials/header.php';
 ?>
 
