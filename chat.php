@@ -1,19 +1,18 @@
 <?php
-/**
- * XPOSED — FAQ chat endpoint (rules-based matcher)
- * POST { q: "when do you stream" } → JSON
- * Rate-limited per IP. Always routes humans to business email on miss.
- */
-
 require __DIR__ . '/app/bootstrap.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 require_post();
 
-rate_limit('chat', (int)config('chat.rate_limit_per_hour'));
+// Skip rate limiting in local dev so testing doesn't lock you out.
+// APP_ENV should be 'local' in your .env on your machine and 'production' on the live server.
+if (config('app.env') !== 'local') {
+    rate_limit('chat', (int)config('chat.rate_limit_per_hour'));
+}
 
 $raw = file_get_contents('php://input');
+// ... rest unchanged
 $data = json_decode($raw ?: '', true);
 $question = trim((string)($data['q'] ?? ''));
 

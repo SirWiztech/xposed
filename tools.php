@@ -25,6 +25,10 @@ $glossary = [
 
 $toolsUsed = [
     ['name' => 'Progression Calculator', 'type' => 'On this page', 'note' => 'Steps a Martingale / Fibonacci / street progression before you risk a single unit on it.'],
+    ['name' => 'Progression Calculator 2', 'type' => 'On this page', 'note' => 'Martingale, Grand, Super, Fibonacci, Lucas, Trippingale, Padovan and Hollandish — full sequences scaled to your units.'],
+    ['name' => 'Roulette Spin Simulator', 'type' => 'On this page', 'note' => 'Simulate European-wheel spins and see colour, dozen, column and hot/cold stats vs the expected maths.'],
+    ['name' => 'Bankroll Calculator', 'type' => 'On this page', 'note' => 'See exactly how many progression steps your bankroll covers — and the step where you go broke.'],
+    ['name' => 'Originals', 'type' => 'On this page', 'note' => 'Click-through boards for Chicken, Keno, Mines, Plinko, Tower and Wheel — view the full image up close.'],
     ['name' => 'Session Tracker', 'type' => 'On this page', 'note' => 'Log strategy, profit, time and notes for every session — the honest record the highlight reel never shows.'],
     ['name' => 'Challenge Tracker', 'type' => 'On this page', 'note' => 'Set a target bankroll and a daily number, log entries, and watch pace against the goal.'],
 ];
@@ -36,6 +40,10 @@ $active = 'tools';
 $extraScripts = [
     'https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js',
     'assets/js/tools.js',
+    'assets/js/progression2.js',
+    'assets/js/roulette.js',
+    'assets/js/bankroll.js',
+    'assets/js/originals.js',
 ];
 
 include __DIR__ . '/app/views/partials/header.php';
@@ -51,10 +59,14 @@ include __DIR__ . '/app/views/partials/header.php';
   <section class="section-pad wrap" style="padding-top:20px;">
     <!-- ======= TAB BAR ======= -->
     <div class="tools-tabs" role="tablist">
-      <button type="button" class="tools-tab is-active" data-tab="calc">Progression Calculator</button>
-      <button type="button" class="tools-tab" data-tab="sessions">Session Tracker</button>
-      <button type="button" class="tools-tab" data-tab="challenge">Challenge Tracker</button>
-      <button type="button" class="tools-tab" data-tab="charts">Progression Charts</button>
+      <button type="button" class="tools-tab is-active" data-tab="calc"><?php icon('chart', 'icon tools-tab-icon'); ?>Progression Calculator</button>
+      <button type="button" class="tools-tab" data-tab="prog2"><?php icon('calc', 'icon tools-tab-icon'); ?>Progression Calculator 2</button>
+      <button type="button" class="tools-tab" data-tab="roulette"><?php icon('wheel', 'icon tools-tab-icon'); ?>Roulette Spin Simulator</button>
+      <button type="button" class="tools-tab" data-tab="bankroll"><?php icon('bank', 'icon tools-tab-icon'); ?>Bankroll Calculator</button>
+      <button type="button" class="tools-tab" data-tab="origin"><?php icon('grid', 'icon tools-tab-icon'); ?>Originals</button>
+      <button type="button" class="tools-tab" data-tab="sessions"><?php icon('calendar', 'icon tools-tab-icon'); ?>Session Tracker</button>
+      <button type="button" class="tools-tab" data-tab="challenge"><?php icon('trophy', 'icon tools-tab-icon'); ?>Challenge Tracker</button>
+      <button type="button" class="tools-tab" data-tab="charts"><?php icon('chart', 'icon tools-tab-icon'); ?>Progression Charts</button>
     </div>
 
     <!-- ======= CALCULATOR ======= -->
@@ -110,6 +122,124 @@ include __DIR__ . '/app/views/partials/header.php';
         </div>
 
         <div id="progression-results" class="t-table-wrap" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- ======= PROGRESSION CALCULATOR 2 ======= -->
+    <div class="tools-panel" id="panel-prog2">
+      <div class="tool-block">
+        <h3>Progression Calculator 2</h3>
+        <p class="t-sub">Full breakdown of the classic escalation systems — sequences scaled to your base unit, chips and bankroll. Pacing math, not a plan of attack.</p>
+
+        <div class="p2-top">
+          <div class="p2-field"><label class="p2-label">🌐 Language</label><select class="p2-select"><option>English</option></select></div>
+          <div class="p2-field"><label class="p2-label">💰 Currency</label><select class="p2-select"><option>USD ($)</option></select></div>
+          <div class="p2-field"><label class="p2-label">🎯 System Focus</label><select class="p2-select"><option>-- No focus --</option></select></div>
+          <div class="p2-field"><label class="p2-label" for="baseUnit">🔢 Base Unit</label><input class="p2-input" type="number" value="1" min="1" step="1" id="baseUnit"></div>
+          <div class="p2-field"><label class="p2-label" for="chipsSpots">🎲 Chips / Spots</label><input class="p2-input" type="number" value="1" min="1" step="1" id="chipsSpots"></div>
+          <div class="p2-field"><label class="p2-label" for="bankrollInput">🏦 Bankroll</label><input class="p2-input" type="number" value="4998" min="1" step="1" id="bankrollInput"></div>
+          <button class="btn btn-primary p2-btn" type="button" id="refreshBtn">⟳ Update</button>
+        </div>
+
+        <div class="p2-grid" id="strategyContainer"></div>
+        <p class="p2-foot">Recommended numbers shown · all sequences based on strategy</p>
+      </div>
+    </div>
+
+    <!-- ======= ROULETTE SPIN SIMULATOR ======= -->
+    <div class="tools-panel" id="panel-roulette">
+      <div class="tool-block">
+        <h3>Roulette Spin Simulator</h3>
+        <p class="t-sub">Simulate European-wheel spins and compare observed stats against the maths. Random variance, not a winning edge.</p>
+
+        <div class="rs-top">
+          <div class="p2-field"><label class="p2-label">Wheel type</label><select class="p2-select" id="wheelType"><option value="european">European (single zero, 37 pockets)</option></select></div>
+          <div class="p2-field"><label class="p2-label" for="spinCount">Number of spins</label><input class="p2-input" type="number" id="spinCount" value="100" min="1" max="5000" step="1"></div>
+          <button class="btn btn-primary p2-btn" type="button" id="spinBtn">▶ Spin</button>
+          <button class="btn btn-ghost p2-btn" type="button" id="resetBtn">↺ Reset</button>
+          <button class="btn btn-ghost p2-btn" type="button" id="downloadBtn">⬇ Download CSV</button>
+        </div>
+
+        <div id="resultsArea"></div>
+
+        <p class="p2-foot">European wheel · <span id="spinCountDisplay">100</span> spins · house edge 2.70%</p>
+      </div>
+    </div>
+
+    <!-- ======= BANKROLL CALCULATOR ======= -->
+    <div class="tools-panel" id="panel-bankroll">
+      <div class="tool-block">
+        <h3>Bankroll Calculator</h3>
+        <p class="t-sub">Work out how many progression steps your bankroll sustains and where you break. The honest number before you spin.</p>
+
+        <div class="bc-setup">
+          <div class="bc-item">
+            <label class="p2-label">Currency</label>
+            <div class="bc-static">USD ($)<span>fixed</span></div>
+          </div>
+          <div class="bc-item">
+            <label class="p2-label" for="bcBankroll">Total bankroll</label>
+            <input class="p2-input bc-input" type="number" id="bcBankroll" value="500" min="1" step="0.01">
+          </div>
+          <div class="bc-item">
+            <label class="p2-label" for="bcBaseBet">Base bet</label>
+            <input class="p2-input bc-input" type="number" id="bcBaseBet" value="8" min="0.01" step="0.01">
+          </div>
+          <div class="bc-item">
+            <label class="p2-label" for="bcMultiplier">Increase on loss (bet multiplier)</label>
+            <input class="p2-input bc-input" type="number" id="bcMultiplier" value="2" min="1.01" step="0.01">
+          </div>
+          <div class="bc-item bc-wide">
+            <label class="p2-label" for="bcReturnPct">Return on loss (%)</label>
+            <div class="bc-return-row">
+              <input class="p2-input" type="number" id="bcReturnPct" style="width:120px;" value="0" min="0" step="0.1">
+              <span class="p2-rec">optional: % of net loss recovered</span>
+              <p class="bc-hint">If set, reduces the net loss after each step (simulates cashback/rakeback).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="t-action-row">
+          <button class="btn btn-primary p2-btn" type="button" id="bcCalcBtn">⟳ Calculate</button>
+        </div>
+
+        <div id="bkResultsArea"></div>
+        <p class="p2-foot">Progression steps · "You are broke!" when bet exceeds remaining bankroll.</p>
+      </div>
+    </div>
+
+    <!-- ======= ORIGINALS ======= -->
+    <div class="tools-panel" id="panel-origin">
+      <div class="tool-block">
+        <h3>Originals</h3>
+        <p class="t-sub">The classic Origin-style games anyone can play on the channel. Pick one to view the full board.</p>
+
+        <div class="ox-grid">
+          <button type="button" class="ox-tile" data-full="assets/CHICKEN.png" data-label="Chicken">
+            <span class="ox-thumb"><img src="<?= e(url('assets/CHICKEN.png')) ?>" alt="Chicken" loading="lazy"></span>
+            <span class="ox-name">Chicken</span>
+          </button>
+          <button type="button" class="ox-tile" data-full="assets/KENO.png" data-label="Keno">
+            <span class="ox-thumb"><img src="<?= e(url('assets/KENO.png')) ?>" alt="Keno" loading="lazy"></span>
+            <span class="ox-name">Keno</span>
+          </button>
+          <button type="button" class="ox-tile" data-full="assets/Mines.png" data-label="Mines">
+            <span class="ox-thumb"><img src="<?= e(url('assets/Mines.png')) ?>" alt="Mines" loading="lazy"></span>
+            <span class="ox-name">Mines</span>
+          </button>
+          <button type="button" class="ox-tile" data-full="assets/PLINKO.png" data-label="Plinko">
+            <span class="ox-thumb"><img src="<?= e(url('assets/PLINKO.png')) ?>" alt="Plinko" loading="lazy"></span>
+            <span class="ox-name">Plinko</span>
+          </button>
+          <button type="button" class="ox-tile" data-full="assets/TOWER.png" data-label="Tower">
+            <span class="ox-thumb"><img src="<?= e(url('assets/TOWER.png')) ?>" alt="Tower" loading="lazy"></span>
+            <span class="ox-name">Tower</span>
+          </button>
+          <button type="button" class="ox-tile" data-full="assets/WHEEL.png" data-label="Wheel">
+            <span class="ox-thumb"><img src="<?= e(url('assets/WHEEL.png')) ?>" alt="Wheel" loading="lazy"></span>
+            <span class="ox-name">Wheel</span>
+          </button>
+        </div>
       </div>
     </div>
 

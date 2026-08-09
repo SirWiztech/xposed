@@ -5,24 +5,24 @@
 
 class Video
 {
-    /** Latest N videos for the homepage rail. */
+    /** Latest N videos for the homepage rail (main uploads only). */
     public static function latest(int $limit = 5): array
     {
         $st = db()->prepare(
-            'SELECT * FROM videos ORDER BY published_at DESC, position ASC LIMIT ?'
+            'SELECT * FROM videos WHERE is_short = 0 ORDER BY published_at DESC, position ASC LIMIT ?'
         );
         $st->execute([$limit]);
         return $st->fetchAll();
     }
 
-    /** Paginated list for /videos archive. */
+    /** Paginated list for /videos archive (main uploads only). */
     public static function paginate(int $page = 1, int $perPage = 12): array
     {
         $offset = max(0, $page - 1) * $perPage;
-        $total = (int)db()->query('SELECT COUNT(*) FROM videos')->fetchColumn();
+        $total = (int)db()->query('SELECT COUNT(*) FROM videos WHERE is_short = 0')->fetchColumn();
 
         $st = db()->prepare(
-            'SELECT * FROM videos ORDER BY published_at DESC, position ASC LIMIT ? OFFSET ?'
+            'SELECT * FROM videos WHERE is_short = 0 ORDER BY published_at DESC, position ASC LIMIT ? OFFSET ?'
         );
         $st->execute([$perPage, $offset]);
         $items = $st->fetchAll();
@@ -50,14 +50,16 @@ class Video
         $db = db();
         $st = $db->prepare(
             'INSERT INTO videos (youtube_id, title, description, thumb, duration,
-                                 view_count, published_at, position)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                                 view_count, published_at, position, is_short)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE title = VALUES(title),
                                      description = VALUES(description),
                                      thumb = VALUES(thumb),
                                      duration = VALUES(duration),
                                      view_count = VALUES(view_count),
-                                     published_at = VALUES(published_at)'
+                                     published_at = VALUES(published_at),
+                                     position = VALUES(position),
+                                     is_short = VALUES(is_short)'
         );
         $st->execute([
             $v['youtube_id'] ?? '',
@@ -68,6 +70,7 @@ class Video
             (int)($v['view_count'] ?? 0),
             $v['published_at'] ?? now(),
             (int)($v['position'] ?? 0),
+            (int)($v['is_short'] ?? 0),
         ]);
         return (int)$db->lastInsertId();
     }

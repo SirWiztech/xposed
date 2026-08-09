@@ -41,7 +41,7 @@
   }
 
   /* ================= Tabs ================= */
-  var TABS = ['calc', 'sessions', 'challenge', 'charts'];
+  var TABS = ['calc', 'prog2', 'roulette', 'bankroll', 'origin', 'sessions', 'challenge', 'charts'];
 
   function switchTab(name) {
     TABS.forEach(function (t) {

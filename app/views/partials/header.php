@@ -70,6 +70,14 @@ $cartCount = array_sum(array_column($_SESSION['cart'] ?? [], 'qty'));
       <?= e($link['label']) ?>
     </a>
     <?php endforeach; ?>
+    <a href="#" id="aiNavLink" aria-label="Open the AI assistant" aria-expanded="false">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M12 3l1.9 5.3 5.3 1.9-5.3 1.9L12 17.4l-1.9-5.3L4.8 10.2l5.3-1.9z" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      AI
+    </a>
   </nav>
 
   <div class="nav-actions">

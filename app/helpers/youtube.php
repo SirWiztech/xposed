@@ -115,6 +115,7 @@ class YoutubeSync
                 'view_count'   => $views,
                 'published_at' => date('Y-m-d H:i:s', strtotime((string)$entry->published)),
                 'position'     => $count,
+                'is_short'     => strpos($href, '/shorts/') !== false ? 1 : 0,
             ]);
             $count++;
         }
@@ -148,7 +149,11 @@ class YoutubeSync
                 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=' . implode(',', $chunk) . '&key=' . $this->apiKey
             );
             foreach ($data['items'] ?? [] as $item) {
-                $out[$item['id']] = $this->iso8601ToClock($item['contentDetails']['duration'] ?? 'PT0S');
+                $iso = $item['contentDetails']['duration'] ?? 'PT0S';
+                $out[$item['id']] = [
+                    'clock'   => $this->iso8601ToClock($iso),
+                    'seconds' => $this->iso8601ToSeconds($iso),
+                ];
             }
         }
         return $out;
@@ -162,6 +167,15 @@ class YoutubeSync
         $s = (int)($m[3] ?? 0);
         if ($h > 0) return sprintf('%d:%02d:%02d', $h, $i, $s);
         return sprintf('%d:%02d', $i, $s);
+    }
+
+    private function iso8601ToSeconds(string $iso): int
+    {
+        preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/', $iso, $m);
+        $h = (int)($m[1] ?? 0);
+        $i = (int)($m[2] ?? 0);
+        $s = (int)($m[3] ?? 0);
+        return $h * 3600 + $i * 60 + $s;
     }
 
     /** Sync via the YouTube Data API (requires an API key). */
@@ -195,15 +209,18 @@ class YoutubeSync
                   ?? $sn['thumbnails']['medium']['url']
                   ?? '';
 
+            $dur = $durations[$vid] ?? ['clock' => '', 'seconds' => 0];
+
             Video::upsertFromYoutube([
                 'youtube_id'   => $vid,
                 'title'        => $sn['title'] ?? 'Untitled',
                 'description'  => $sn['description'] ?? '',
                 'thumb'        => (string)$thumb,
-                'duration'     => $durations[$vid] ?? '',
+                'duration'     => $dur['clock'],
                 'view_count'   => 0, // needs videos.list statistics — not fetched here (quota)
                 'published_at' => date('Y-m-d H:i:s', strtotime($sn['publishedAt'] ?? 'now')),
                 'position'     => $i,
+                'is_short'     => $dur['seconds'] > 0 && $dur['seconds'] < 60 ? 1 : 0,
             ]);
             $count++;
         }

@@ -36,7 +36,7 @@ function require_post(): void
 }
 
 /**
- * Naive per-IP rate limit backed by the chat_messages table.
+ * Naive per-IP rate limit backed by the rate_limits table.
  * Returns remaining budget; exits 429 when exhausted.
  *
  * @param string $key   e.g. 'chat', 'login'
@@ -55,14 +55,16 @@ function rate_limit(string $key, int $limit, int $window_sec = 3600): int
     $st->execute([$key, $ip, (int)$window_sec]);
     $used = (int)$st->fetchColumn();
 
-    $st = $db->prepare('INSERT INTO rate_limits (rkey, ip, created_at) VALUES (?, ?, NOW())');
-    $st->execute([$key, $ip]);
-
     if ($used >= $limit) {
         http_response_code(429);
         header('Content-Type: application/json');
         exit(json_encode(['ok' => false, 'error' => 'Slow down — try again in a bit.']));
     }
+
+    // Only log the request when it's actually allowed, so rejected retries
+    // can't refresh the window and self-perpetuate the lockout.
+    $st = $db->prepare('INSERT INTO rate_limits (rkey, ip, created_at) VALUES (?, ?, NOW())');
+    $st->execute([$key, $ip]);
 
     return $limit - $used - 1;
 }

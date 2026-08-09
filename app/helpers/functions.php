@@ -137,6 +137,10 @@ function icon(string $name, string $class = 'icon'): void
         'x'          => '<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>',
         'instagram'  => '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>',
         'chat'       => '<path d="M4 4h16v12H8l-4 4V4z"/>',
+        'calc'       => '<rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="12" y2="15"/>',
+        'wheel'      => '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><line x1="12" y1="12" x2="12" y2="3"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="3" y2="12"/><line x1="12" y1="12" x2="21" y2="12"/><line x1="12" y1="12" x2="5.6" y2="5.6"/><line x1="12" y1="12" x2="18.4" y2="5.6"/><line x1="12" y1="12" x2="5.6" y2="18.4"/><line x1="12" y1="12" x2="18.4" y2="18.4"/>',
+        'bank'       => '<path d="M3 10l9-6 9 6"/><line x1="4" y1="10" x2="20" y2="10"/><rect x="6" y1="10" width="12" height="10"/><line x1="9" y1="13" x2="9" y2="17"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="15" y1="13" x2="15" y2="17"/>',
+        'grid'       => '<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/>',
     ];
     if (!isset($icons[$name])) {
         return;

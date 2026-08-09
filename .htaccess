@@ -1,0 +1,17 @@
+# XPOSED — root access rules (additive; no rewrite rules that alter routing)
+
+# Block direct web access to secret/dot files (.env etc.)
+<IfModule mod_authz_core.c>
+  <FilesMatch "^\.env">
+    Require all denied
+  </FilesMatch>
+  <FilesMatch "^\.git">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^\.env|^\.git">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>

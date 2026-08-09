@@ -103,6 +103,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .btn.sm{ padding:6px 11px; font-size:.68rem; }
 .btn.danger{ background:transparent; border-color:rgba(225,6,0,.45); color:var(--signal-red); }
 .btn.danger:hover{ background:rgba(225,6,0,.08); }
+.badge{ display:inline-block; margin-left:6px; padding:2px 8px; border-radius:999px; background:rgba(225,6,0,.15); border:1px solid rgba(225,6,0,.45); color:var(--signal-red); font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; vertical-align:middle; }
 
 /* ---------- CARDS ---------- */
 .card{

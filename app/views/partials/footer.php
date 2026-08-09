@@ -61,6 +61,7 @@ $socials = [
 </script>
 
 <?php include __DIR__ . '/chat-widget.php'; ?>
+<?php include __DIR__ . '/ai-widget.php'; ?>
 
 <?php
 $jsVersion = function (string $local) {
@@ -73,6 +74,7 @@ $jsVersion = function (string $local) {
 ?>
 <script src="<?= e($jsVersion('assets/js/main.js')) ?>" defer></script>
 <script src="<?= e($jsVersion('assets/js/chat.js')) ?>" defer></script>
+<script src="<?= e($jsVersion('assets/js/ai-chat.js')) ?>" defer></script>
 <?php if (isset($extraScripts)): foreach ($extraScripts as $s): ?>
 <script src="<?= e($jsVersion($s)) ?>" defer></script>
 <?php endforeach; endif; ?>

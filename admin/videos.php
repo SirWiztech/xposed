@@ -82,7 +82,7 @@ include __DIR__ . '/_header.php';
     <?php foreach ($videos as $v): ?>
     <tr>
       <td><?php if ($v['thumb']): ?><img class="thumb" src="<?= e(upload_url($v['thumb'])) ?>" alt=""><?php endif; ?></td>
-      <td><?= e($v['title']) ?></td>
+      <td><?= e($v['title']) ?><?php if (!empty($v['is_short'])): ?> <span class="badge">SHORT</span><?php endif; ?></td>
       <td class="tab-nums"><?= e($v['duration']) ?></td>
       <td class="tab-nums"><?= e(fmt_number((int)$v['view_count'])) ?></td>
       <td><?= e(date('M j, Y', strtotime($v['published_at']))) ?></td>

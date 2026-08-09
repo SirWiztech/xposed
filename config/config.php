@@ -5,6 +5,10 @@
  * Override any value with a real environment variable. Never commit secrets.
  */
 
+// Load local secrets from a gitignored .env (see .env.example).
+require_once __DIR__ . '/../app/helpers/env.php';
+load_env(__DIR__ . '/../.env');
+
 return [
     'app' => [
         'name'    => 'Xposed',
@@ -57,5 +61,15 @@ return [
 
     'chat' => [
         'rate_limit_per_hour' => 20,
+    ],
+
+    // Google AI Studio (Gemini) — the AI chat assistant. Key stays server-side.
+    'google_ai' => [
+        'api_key' => getenv('GOOGLE_AI_API_KEY') ?: '',
+        'model'   => getenv('GOOGLE_AI_MODEL') ?: 'gemini-3.6-flash',
+        'timeout' => 30,
+        'rate_limit_per_hour' => 40,
+        // CA bundle used by cURL (WAMP ships one here). Set elsewhere on other hosts.
+        'cafile'  => getenv('GOOGLE_AI_CAFILE') ?: 'C:/wamp64/bin/php/php8.5.0/cacert.pem',
     ],
 ];
