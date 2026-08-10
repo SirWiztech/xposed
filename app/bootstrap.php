@@ -13,6 +13,10 @@ require_once __DIR__ . '/../app/helpers/security.php';
 require_once __DIR__ . '/../app/helpers/cart.php';
 require_once __DIR__ . '/../app/helpers/upload.php';
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../app/helpers/errors.php';
+
+// Uncaught exceptions render as a styled, actionable page — never a bare 500.
+set_exception_handler('render_fatal_error');
 
 // Session (httponly, samesite=lax)
 if (session_status() !== PHP_SESSION_ACTIVE) {
