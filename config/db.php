@@ -14,8 +14,9 @@ function db(): PDO
     $cfg = config('db');
 
     $dsn = sprintf(
-        'mysql:host=%s;dbname=%s;charset=%s',
+        'mysql:host=%s;port=%d;dbname=%s;charset=%s',
         $cfg['host'],
+        (int)$cfg['port'],
         $cfg['name'],
         $cfg['charset']
     );

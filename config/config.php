@@ -43,8 +43,12 @@ return [
         'debug'   => (getenv('XPOSED_DEBUG') ?: '0') === '1',
     ],
 
+    // Database — credentials are sourced from the gitignored `.env` file
+    // (XPOSED_DB_*). The fallbacks below are WAMP-local dev defaults only;
+    // never put real production credentials in this file.
     'db' => [
         'host'    => getenv('XPOSED_DB_HOST') ?: '127.0.0.1',
+        'port'    => getenv('XPOSED_DB_PORT') ?: '3306',
         'name'    => getenv('XPOSED_DB_NAME') ?: 'xposed',
         'user'    => getenv('XPOSED_DB_USER') ?: 'root',
         'pass'    => getenv('XPOSED_DB_PASS') ?: '',

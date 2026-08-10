@@ -22,13 +22,16 @@ mysql -u root --default-character-set=utf8mb4 < database.sql
 Options: deploy on WAMP (this repo), or point `config/config.php` at your host.
 
 ### 2. Config
-All values live in `config/config.php` and can be overridden by environment variables.
-Defaults assume WAMP local (`root` / no password).
+All secrets (database credentials, API keys) live in a gitignored **`.env`** file at the project root — copy `.env.example` and fill in real values; never commit secrets.
+`config/config.php` reads these via `getenv()` (loaded by `app/helpers/env.php`). Dev fallbacks in the config assume WAMP local (`root` / no password) only.
+
+Key variables (put these in `.env`):
 
 | Var | Purpose |
 |-----|---------|
+| `XPOSED_DB_HOST` / `XPOSED_DB_PORT` / `XPOSED_DB_NAME` / `XPOSED_DB_USER` / `XPOSED_DB_PASS` | Database credentials + port (required on any host) |
+| `SHIPIT_PHP_VERSION` | PHP version for InfinityFree's "phpix" runtime (e.g. `8.2`); app requires PHP 8+ |
 | `XPOSED_BASE_URL` | Site base path (e.g. `/xposed` on WAMP, `/` at domain root) |
-| `XPOSED_DB_HOST/NAME/USER/PASS` | Database credentials |
 | `YOUTUBE_API_KEY` | YouTube Data API v3 key (enables the "Sync from YouTube" button) |
 | `YOUTUBE_CHANNEL_ID` | Channel handle, e.g. `XposedLIVE` |
 | `STRIPE_SECRET_KEY` / `STRIPE_PUBLISHABLE_KEY` | Stripe hosted checkout. Empty = email-order fallback |
