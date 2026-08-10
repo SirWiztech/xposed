@@ -19,7 +19,7 @@
   <span>AI</span>
 </button>
 
-<div class="ai-panel" id="aiPanel" data-endpoint="<?= e(url('ai-chat.php')) ?>">
+<div class="ai-panel" id="aiPanel" data-endpoint="ai-chat.php">
   <div class="ai-head">
     <span class="ai-avatar" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="#E10600" stroke-width="1.8">

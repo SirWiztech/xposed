@@ -4,7 +4,7 @@
   var launcher = document.getElementById('aiLauncher');
   var panel = document.getElementById('aiPanel');
   var navLink = document.getElementById('aiNavLink');
-  if (!launcher || !panel) return;
+  if (!panel) return;
 
   var body = document.getElementById('aiBody');
   var form = document.getElementById('aiForm');
@@ -107,21 +107,21 @@
 
   function open() {
     panel.classList.add('open');
-    launcher.setAttribute('aria-expanded', 'true');
+    if (launcher) launcher.setAttribute('aria-expanded', 'true');
     if (navLink) navLink.setAttribute('aria-expanded', 'true');
     if (!body.childNodes.length) renderHistory();
     input.focus();
   }
   function close() {
     panel.classList.remove('open');
-    launcher.setAttribute('aria-expanded', 'false');
+    if (launcher) launcher.setAttribute('aria-expanded', 'false');
     if (navLink) navLink.setAttribute('aria-expanded', 'false');
   }
   function toggle() {
     if (panel.classList.contains('open')) { close(); } else { open(); }
   }
 
-  launcher.addEventListener('click', toggle);
+  if (launcher) launcher.addEventListener('click', toggle);
   if (closeBtn) closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && panel.classList.contains('open')) close();
@@ -130,7 +130,7 @@
   if (navLink) {
     navLink.addEventListener('click', function (e) {
       e.preventDefault();
-      toggle();
+      open();
     });
   }
 
@@ -192,7 +192,7 @@
       .then(finish);
   });
 
-  newChat.addEventListener('click', function () {
+  if (newChat) newChat.addEventListener('click', function () {
     history = [];
     saveHistory();
     body.innerHTML = '';

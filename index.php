@@ -220,7 +220,7 @@ include __DIR__ . '/app/views/partials/header.php';
   <section id="about" class="section-pad wrap reveal">
     <div class="about-grid">
       <div class="portrait">
-        <img src="<?= e(url('assets/Cody-image.jpg')) ?>" alt="Cody — Xposed" loading="lazy">
+        <img src="assets/Cody-image.jpg" alt="Cody — Xposed" loading="lazy">
         <span class="mono">CODY / XPOSED</span>
       </div>
       <div class="about-copy">

@@ -36,54 +36,61 @@
     var remaining = bankroll;
     var bet = baseBet;
     var steps = [];
-    var lastAffordable = null;
+    var totalWagered = 0;
 
-while (remaining >= bet) {
-      var stepNo = steps.length + 1;
-      var totalBets = 0;
-      for (var k = 0; k < steps.length; k++) totalBets += steps[k].bet;
-      totalBets += bet;
-      var netLoss = totalBets * (1 - returnFactor);
-      steps.push({ step: stepNo, bet: bet, netLoss: netLoss, remaining: remaining - bet });
-      remaining = remaining - bet;
+    while (remaining >= bet) {
+      totalWagered += bet;
+      remaining -= bet;
+      steps.push({
+        step: steps.length + 1,
+        bet: bet,
+        netLoss: totalWagered * (1 - returnFactor),
+        remaining: remaining
+      });
       if (remaining < bet * multiplier) break;
       bet = bet * multiplier;
     }
 
-    render(steps, multiplier, remaining);
+    render(steps, multiplier, remaining, totalWagered);
   }
 
-  function render(steps, multiplier, remaining) {
+  function render(steps, multiplier, remaining, totalWagered) {
     if (!steps || !steps.length) {
       resultsArea.innerHTML = '<div class="rs-empty">Base bet already exceeds your bankroll — nothing to cover.</div>';
       return;
     }
 
     var cover = steps.length;
-    var html =
-      '<div class="bc-head"><h3 class="bc-title">Your results</h3>' +
-      '<span class="bc-cover">You can cover ' + cover + ' progression' + (cover > 1 ? 's' : '') + '</span></div>' +
-      '<div class="bc-table-wrap"><table class="bc-table"><thead><tr>' +
-      '<th>Step</th><th>Bet size</th><th>Net loss</th></tr></thead><tbody>';
+    var nextBet = steps[steps.length - 1].bet * multiplier;
 
-    var brokeShown = false;
+    var html =
+      '<div class="bc-head">' +
+        '<h3 class="bc-title">Your results</h3>' +
+        '<span class="bc-cover">Covers ' + cover + (cover > 1 ? ' steps' : ' step') + ' · next bet ' + money(nextBet) + ' unfunded</span>' +
+      '</div>' +
+      '<div class="bc-table-wrap"><table class="bc-table"><thead><tr>' +
+        '<th>Step</th><th>Bet size</th><th>Net loss</th><th>Remaining</th><th>Status</th>' +
+      '</tr></thead><tbody>';
+
     for (var i = 0; i < steps.length; i++) {
       var s = steps[i];
-      var nextBet = i < steps.length - 1 ? steps[i + 1].bet : stepBetAfter(steps[i].bet, multiplier);
-      if (!brokeShown && s.remaining < nextBet) {
-        html += '<tr class="bc-broke"><td>' + s.step + '</td><td>' + money(s.bet) + '</td><td>You are broke!</td></tr>';
-        brokeShown = true;
-      } else {
-        html += '<tr><td>' + s.step + '</td><td>' + money(s.bet) + '</td><td>' + money(s.netLoss) + '</td></tr>';
-      }
+      var isBroke = i === steps.length - 1;
+      html += '<tr' + (isBroke ? ' class="bc-broke"' : '') + '>' +
+        '<td>' + s.step + '</td>' +
+        '<td>' + money(s.bet) + '</td>' +
+        '<td>' + money(s.netLoss) + '</td>' +
+        '<td>' + money(s.remaining) + '</td>' +
+        '<td>' + (isBroke ? 'Broke' : '') + '</td>' +
+      '</tr>';
     }
+
+    html += '<tr class="bc-total">' +
+      '<td>Total</td><td>' + money(totalWagered) + '</td>' +
+      '<td>' + money(steps[steps.length - 1].netLoss) + '</td><td>' + money(remaining) + '</td><td></td>' +
+    '</tr>';
 
     html += '</tbody></table></div>';
     resultsArea.innerHTML = html;
-  }
-
-  function stepBet(current, multiplier) {
-    return current * multiplier;
   }
 
   calcBtn.addEventListener('click', calculate);

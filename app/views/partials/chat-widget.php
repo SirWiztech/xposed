@@ -16,8 +16,8 @@ $faqSuggestions = [
 </button>
 
 <div class="chat-panel" id="chatPanel"
-     data-endpoint="<?= e(url('chat.php')) ?>"
-     data-contact-endpoint="<?= e(url('contact.php')) ?>">
+     data-endpoint="chat.php"
+     data-contact-endpoint="contact.php">
   <div class="chat-head">
     <span class="logo">X<span>POSED</span></span>
     <nav class="chat-tabs">

@@ -15,7 +15,7 @@ $socials = [
   <div class="wrap">
     <div class="footer-row">
       <div>
-        <div class="logo" style="font-size:1.1rem;"><span class="logo-mark"><img src="<?= e(url('assets/' . rawurlencode('image-removebg-preview (7).png'))) ?>" alt="Xposed"></span>POSED</div>
+        <div class="logo" style="font-size:1.1rem;"><span class="logo-mark"><img src="<?= e('assets/' . rawurlencode('image-removebg-preview (7).png')) ?>" alt="Xposed"></span>POSED</div>
         <p class="fine" style="margin-top:8px;">© <?= date('Y') ?> Xposed. All rights reserved.</p>
         <p class="fine"><?php icon('mail', 'icon icon-sm') ?> businessxposed@gmail.com</p>
       </div>
@@ -69,7 +69,7 @@ $jsVersion = function (string $local) {
         return $local;
     }
     $abs = __DIR__ . '/../../../' . $local;
-    return url($local) . '?v=' . @filemtime($abs);
+    return $local . '?v=' . @filemtime($abs);
 };
 ?>
 <script src="<?= e($jsVersion('assets/js/main.js')) ?>" defer></script>

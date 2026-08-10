@@ -117,15 +117,30 @@
       var strat = STRATEGIES[s];
       var scaledSeq = strat.sequence.map(function (v) { return v * multiplier; });
       var scaledTotal = strat.total * multiplier;
-      var scaledLeft = strat.left * multiplier;
+      var scaledLeft = bankroll - scaledTotal;
+      var short = scaledLeft < 0;
+
+      var bustAt = -1;
+      var spent = 0;
+      for (var b = 0; b < scaledSeq.length; b++) {
+        spent += scaledSeq[b];
+        if (spent > bankroll) { bustAt = b; break; }
+      }
 
       var chipsHtml = '';
       for (var i = 0; i < scaledSeq.length; i++) {
-        var cls = (i === 0 || i === scaledSeq.length - 1) ? 'p2-chip p2-chip-hl' : 'p2-chip';
-        chipsHtml += '<span class="' + cls + '">' + formatCurrency(scaledSeq[i]) + '</span>';
+        var cls = 'p2-chip';
+        if (i === 0 || i === scaledSeq.length - 1) cls += ' p2-chip-hl';
+        if (i === bustAt) cls += ' p2-chip-bust';
+        chipsHtml += '<span class="' + cls + '" title="' +
+          (i === bustAt ? 'Bankroll runs out here (cumulative ' + formatCurrency(spent) + ')' : '') +
+          '">' + formatCurrency(scaledSeq[i]) + '</span>';
       }
 
       var recLabel = strat.rec ? 'Recommended numbers to play · ' + strat.rec : '';
+      var statusPill = bustAt === -1
+        ? '<span class="p2-total p2-ok">OK · fits bankroll</span>'
+        : '<span class="p2-total p2-short">Runs out at step ' + (bustAt + 1) + ' of ' + scaledSeq.length + '</span>';
 
       html +=
         '<div class="p2-card">' +
@@ -138,8 +153,12 @@
           '</div>' +
           '<div class="p2-chips">' + chipsHtml + '</div>' +
           '<div class="p2-totals">' +
+            '<span class="p2-total">Bankroll: ' + formatCurrency(bankroll) + '</span>' +
             '<span class="p2-total">Total: ' + formatCurrency(scaledTotal) + '</span>' +
-            '<span class="p2-total p2-left">Left: ' + formatCurrency(scaledLeft) + '</span>' +
+            (short
+              ? '<span class="p2-total p2-short">Short: ' + formatCurrency(-scaledLeft) + '</span>'
+              : '<span class="p2-total p2-left">Left: ' + formatCurrency(scaledLeft) + '</span>') +
+            statusPill +
           '</div>' +
         '</div>';
     }

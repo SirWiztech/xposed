@@ -9,10 +9,36 @@
 require_once __DIR__ . '/../app/helpers/env.php';
 load_env(__DIR__ . '/../.env');
 
+// Auto-detect the install subfolder from the request URI. Inside the WAMP
+// /xposed subfolder this resolves to "/xposed"; at the document root on
+// InfinityFree it resolves to an empty string. Override with XPOSED_BASE_URL.
+$autoBase = '';
+
+// Preferred: derive from SCRIPT_NAME (typical Apache setups).
+if (isset($_SERVER['SCRIPT_NAME'])) {
+    $dir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+    if ($dir !== '' && $dir !== '.') {
+        $autoBase = $dir;
+    }
+}
+
+// Fallback: derive from SCRIPT_FILENAME relative to DOCUMENT_ROOT
+// (covers hosts where SCRIPT_NAME is empty or unusual).
+if ($autoBase === '' && !empty($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['SCRIPT_FILENAME'])) {
+    $docRoot = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '/');
+    $script  = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
+    if ($docRoot !== '' && str_starts_with($script, $docRoot)) {
+        $dir = rtrim(str_replace('\\', '/', dirname(substr($script, strlen($docRoot)))), '/');
+        if ($dir !== '' && $dir !== '.') {
+            $autoBase = $dir;
+        }
+    }
+}
+
 return [
     'app' => [
         'name'    => 'Xposed',
-        'base_url' => rtrim(getenv('XPOSED_BASE_URL') ?: '/xposed', '/'), // WAMP subfolder
+        'base_url' => rtrim(getenv('XPOSED_BASE_URL') ?: $autoBase, '/'),
         'env'     => getenv('XPOSED_ENV') ?: 'local',
         'debug'   => (getenv('XPOSED_DEBUG') ?: '0') === '1',
     ],

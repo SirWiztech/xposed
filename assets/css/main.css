@@ -608,6 +608,9 @@ footer{ border-top:1px solid rgba(255,255,255,0.08); padding-block:48px; positio
 .p2-totals{ display:flex; flex-wrap:wrap; justify-content:flex-start; gap:10px 24px; margin-top:14px; font-weight:500; }
 .p2-total{ background:var(--surface-2); border:1px solid rgba(255,255,255,0.08); padding:4px 14px; border-radius:2px; font-size:.88rem; color:var(--paper); }
 .p2-left{ background:#e1ecf9; color:#00337a; }
+.p2-chip-bust{ background:rgba(225,6,0,0.38); border-color:var(--signal-red); color:var(--paper); box-shadow:0 0 0 1px rgba(225,6,0,0.45); }
+.p2-ok{ background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.45); color:#8affc0; }
+.p2-short{ background:rgba(225,6,0,.14); border:1px solid rgba(225,6,0,.45); color:#ff9d97; }
 .p2-foot{ margin-top:18px; font-size:.8rem; color:var(--muted); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; text-align:right; }
 
 /* ---------- ROULETTE SPIN SIMULATOR ---------- */
@@ -650,6 +653,12 @@ footer{ border-top:1px solid rgba(255,255,255,0.08); padding-block:48px; positio
 .bc-table-wrap tr:last-child td{ border-bottom:none; }
 .bc-broke{ background:rgba(225,6,0,0.14); }
 .bc-broke td{ color:var(--signal-red); font-weight:700; }
+.bc-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px; margin:26px 0 12px; }
+.bc-table{ width:100%; border-collapse:collapse; font-size:.9rem; }
+.bc-table th{ text-align:left; padding:12px 14px; font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); border-bottom:1px solid rgba(255,255,255,0.12); background:var(--surface-2); white-space:nowrap; }
+.bc-table td{ padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.bc-table tbody tr:hover{ background:rgba(255,255,255,0.02); }
+.bc-total td{ font-weight:600; color:var(--paper); border-top:1px solid rgba(255,255,255,0.14); background:var(--surface-2); }
 
 /* ---------- ORIGINALS (gallery + lightbox) ---------- */
 .ox-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px; margin-top:26px; }

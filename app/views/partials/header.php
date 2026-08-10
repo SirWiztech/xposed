@@ -41,10 +41,10 @@ $siteName = config('seo.site_name');
 <link rel="canonical" href="<?= e($canonical) ?>">
 <?php if ($prevUrl): ?><link rel="prev" href="<?= e($prevUrl) ?>"><?php endif; ?>
 <?php if ($nextUrl): ?><link rel="next" href="<?= e($nextUrl) ?>"><?php endif; ?>
-<link rel="icon" href="<?= e(url('assets/favicon.ico')) ?>" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="<?= e(url('assets/android-chrome-192x192.png')) ?>">
-<link rel="icon" type="image/png" sizes="512x512" href="<?= e(url('assets/android-chrome-512x512.png')) ?>">
-<link rel="apple-touch-icon" href="<?= e(url('assets/apple-touch-icon.png')) ?>">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/android-chrome-512x512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
 <!-- Open Graph / Twitter -->
 <meta property="og:site_name" content="<?= e($siteName) ?>">
@@ -76,7 +76,7 @@ $siteName = config('seo.site_name');
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="<?= e(url('assets/css/main.css') . '?v=' . @filemtime(__DIR__ . '/../../../assets/css/main.css')) ?>">
+<link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body>
 
@@ -91,12 +91,12 @@ $siteName = config('seo.site_name');
 
 <header id="siteHeader">
   <?php if ($active && $active !== 'home'): ?>
-  <button class="back-btn" id="backBtn" data-home="<?= e(url('index.php')) ?>" aria-label="Go back to the previous page">
+  <button class="back-btn" id="backBtn" data-home="index.php" aria-label="Go back to the previous page">
     <?php icon('arrow-left') ?><span>Back</span>
   </button>
   <?php endif; ?>
 
-  <a href="<?= e(url('index.php')) ?>" class="logo"><span class="logo-mark"><img src="<?= e(url('assets/' . rawurlencode('image-removebg-preview (7).png'))) ?>" alt="Xposed"></span>POSED</a>
+  <a href="index.php" class="logo"><span class="logo-mark"><img src="<?= e('assets/' . rawurlencode('image-removebg-preview (7).png')) ?>" alt="Xposed"></span>POSED</a>
 
   <nav class="links" aria-label="Primary">
     <?php foreach ($navLinks as $key => $link): ?>
@@ -116,7 +116,7 @@ $siteName = config('seo.site_name');
   </nav>
 
   <div class="nav-actions">
-    <a href="<?= e(url('cart.php')) ?>" class="live-pill" aria-label="Cart">
+    <a href="cart.php" class="live-pill" aria-label="Cart">
       <span class="nav-icon" style="width:15px;height:15px;"><?php icon('bag') ?></span>
       <span class="pill-label">Cart</span><?php if ($cartCount > 0): ?><span class="cart-count tab-nums"><?= (int)$cartCount ?></span><?php endif; ?>
     </a>

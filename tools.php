@@ -216,27 +216,27 @@ include __DIR__ . '/app/views/partials/header.php';
 
         <div class="ox-grid">
           <button type="button" class="ox-tile" data-full="assets/CHICKEN.png" data-label="Chicken">
-            <span class="ox-thumb"><img src="<?= e(url('assets/CHICKEN.png')) ?>" alt="Chicken" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/CHICKEN.png" alt="Chicken" loading="lazy"></span>
             <span class="ox-name">Chicken</span>
           </button>
           <button type="button" class="ox-tile" data-full="assets/KENO.png" data-label="Keno">
-            <span class="ox-thumb"><img src="<?= e(url('assets/KENO.png')) ?>" alt="Keno" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/KENO.png" alt="Keno" loading="lazy"></span>
             <span class="ox-name">Keno</span>
           </button>
           <button type="button" class="ox-tile" data-full="assets/Mines.png" data-label="Mines">
-            <span class="ox-thumb"><img src="<?= e(url('assets/Mines.png')) ?>" alt="Mines" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/Mines.png" alt="Mines" loading="lazy"></span>
             <span class="ox-name">Mines</span>
           </button>
           <button type="button" class="ox-tile" data-full="assets/PLINKO.png" data-label="Plinko">
-            <span class="ox-thumb"><img src="<?= e(url('assets/PLINKO.png')) ?>" alt="Plinko" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/PLINKO.png" alt="Plinko" loading="lazy"></span>
             <span class="ox-name">Plinko</span>
           </button>
           <button type="button" class="ox-tile" data-full="assets/TOWER.png" data-label="Tower">
-            <span class="ox-thumb"><img src="<?= e(url('assets/TOWER.png')) ?>" alt="Tower" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/TOWER.png" alt="Tower" loading="lazy"></span>
             <span class="ox-name">Tower</span>
           </button>
           <button type="button" class="ox-tile" data-full="assets/WHEEL.png" data-label="Wheel">
-            <span class="ox-thumb"><img src="<?= e(url('assets/WHEEL.png')) ?>" alt="Wheel" loading="lazy"></span>
+            <span class="ox-thumb"><img src="assets/WHEEL.png" alt="Wheel" loading="lazy"></span>
             <span class="ox-name">Wheel</span>
           </button>
         </div>

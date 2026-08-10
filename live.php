@@ -20,16 +20,22 @@ if ($siteHost) {
 }
 $twitchParents = array_values(array_unique($twitchParents));
 
+// Twitch's embed CSP only frames HTTPS origins (or localhost over either scheme).
+// On an HTTP-only host (e.g. a free subdomain) the embed would be blocked, so hide it.
+$isSecure     = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+$requestHost  = (string)($_SERVER['HTTP_HOST'] ?? '');
+$twitchUsable = $isSecure || in_array($requestHost, ['localhost', '127.0.0.1'], true);
+
 $vods = Video::latest(3);
 
 $pageTitle       = 'Live — Xposed';
 $metaDescription = 'Watch Xposed live — Kick and Twitch. High-stakes slots, competitive gaming, and chat that never gets boring.';
 $active = 'live';
 
-$extraScripts = [
-    'https://embed.twitch.tv/embed/v1.js',
-    'assets/js/live.js',
-];
+$extraScripts = ['assets/js/live.js'];
+if ($twitchUsable) {
+    array_unshift($extraScripts, 'https://embed.twitch.tv/embed/v1.js');
+}
 
 include __DIR__ . '/app/views/partials/header.php';
 ?>
@@ -65,11 +71,12 @@ include __DIR__ . '/app/views/partials/header.php';
         <div class="stream-player">
           <iframe src="<?= e($player) ?>?autoplay=false&muted=false"
                   title="Xposed live on Kick" frameborder="0" scrolling="no"
-                  allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+                  allow="autoplay; fullscreen; encrypted-media"></iframe>
         </div>
       </div>
 
       <!-- TWITCH -->
+      <?php if ($twitchUsable): ?>
       <div class="stream-card is-twitch">
         <div class="stream-head">
           <span class="stream-badge twitch">TWITCH</span>
@@ -83,6 +90,18 @@ include __DIR__ . '/app/views/partials/header.php';
              data-channel="<?= e($twitchChan) ?>"
              data-parents="<?= e(implode(',', $twitchParents)) ?>"></div>
       </div>
+      <?php else: ?>
+      <div class="stream-card is-twitch">
+        <div class="stream-head">
+          <span class="stream-badge twitch">TWITCH</span>
+          <span class="stream-handle">twitch.tv/<?= e($twitchChan) ?></span>
+        </div>
+        <div class="stream-player embed-fallback">
+          <p>Twitch’s embed requires HTTPS, which this host doesn’t serve. Watch live on twitch.tv instead.</p>
+          <a class="btn btn-ghost" href="https://twitch.tv/<?= e($twitchChan) ?>" target="_blank" rel="noopener">Open Twitch →</a>
+        </div>
+      </div>
+      <?php endif; ?>
     </div>
 
     <?php if (!$isLive && $vods): ?>
