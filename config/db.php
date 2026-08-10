@@ -58,10 +58,10 @@ function pdo_error_hint(PDOException $e): string
 
     $map = [
         '1045' => 'access denied — check XPOSED_DB_USER / XPOSED_DB_PASS.',
-        '1049' => 'unknown database — check XPOSED_DB_NAME (InfinityFree prefixes it, e.g. if0_<user>_<db>).',
-        '2002' => 'MySQL host unreachable — check XPOSED_DB_HOST (InfinityFree uses a remote host such as sqlXXX.infinityfree.com, NOT 127.0.0.1) and XPOSED_DB_PORT.',
-        '2003' => 'connection refused — check XPOSED_DB_HOST and XPOSED_DB_PORT.',
-        'HY000' => 'host check failed — the db* settings in .env may be wrong (host, port).',
+        '1049' => 'unknown database — check the DB name (managed DBs are prefixed, e.g. db_<id> on Wasmer).',
+        '2002' => 'host unreachable — DB host/port come from the hosting dashboard (Wasmer injects DB_HOST/DB_PORT automatically; do NOT use 127.0.0.1 on the live site).',
+        '2003' => 'connection refused — check the DB host/port from the hosting dashboard.',
+        'HY000' => 'host-check failed — the DB settings (host, port, user) may be wrong.',
     ];
 
     $hint = $map[$num] ?? null;

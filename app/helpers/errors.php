@@ -36,10 +36,11 @@ function render_fatal_error(Throwable $e): void
     if ($isDb) {
         $tips = '<ol>'
             . '<li>Open the server’s <code>.env</code> at the docroot (e.g. <code>/app/.env</code>).</li>'
-            . '<li>Set <code>XPOSED_DB_HOST</code> to the MySQL host shown in your hosting client area '
-            . '(InfinityFree: <code>sqlXXX.infinityfree.com</code> — <strong>not</strong> 127.0.0.1).</li>'
-            . '<li>Check <code>XPOSED_DB_PORT</code>, and the prefixed '
-            . '<code>XPOSED_DB_NAME</code> / <code>XPOSED_DB_USER</code> pair.</li>'
+            . '<li>Set <code>XPOSED_DB_HOST</code> (or leave it unset so the injected '
+            . '<code>DB_HOST</code> on Wasmer is used) to the MySQL host from your hosting '
+            . 'dashboard — <strong>not</strong> 127.0.0.1.</li>'
+            . '<li>Check <code>XPOSED_DB_PORT</code> / <code>DB_PORT</code>, and that the '
+            . '<code>DB_NAME</code> / <code>DB_USER</code> pair matches the database.</li>'
             . '<li>Confirm the database has been imported once from <code>database.sql</code> (utf8mb4).</li>'
             . '</ol>';
     }

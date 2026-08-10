@@ -44,14 +44,16 @@ return [
     ],
 
     // Database — credentials are sourced from the gitignored `.env` file
-    // (XPOSED_DB_*). The fallbacks below are WAMP-local dev defaults only;
-    // never put real production credentials in this file.
+    // (XPOSED_DB_*). When those aren't set, fall back to the vars Wasmer
+    // injects for its auto-provisioned MySQL (DB_HOST/DB_PORT/DB_NAME/
+    // DB_USER/DB_USERNAME/DB_PASSWORD). The last fallbacks are WAMP-local
+    // dev defaults only; never put real production credentials in this file.
     'db' => [
-        'host'    => getenv('XPOSED_DB_HOST') ?: '127.0.0.1',
-        'port'    => getenv('XPOSED_DB_PORT') ?: '3306',
-        'name'    => getenv('XPOSED_DB_NAME') ?: 'xposed',
-        'user'    => getenv('XPOSED_DB_USER') ?: 'root',
-        'pass'    => getenv('XPOSED_DB_PASS') ?: '',
+        'host'    => getenv('XPOSED_DB_HOST') ?: getenv('DB_HOST') ?: '127.0.0.1',
+        'port'    => getenv('XPOSED_DB_PORT') ?: getenv('DB_PORT') ?: '3306',
+        'name'    => getenv('XPOSED_DB_NAME') ?: getenv('DB_NAME') ?: 'xposed',
+        'user'    => getenv('XPOSED_DB_USER') ?: (getenv('DB_USER') ?: (getenv('DB_USERNAME') ?: 'root')),
+        'pass'    => getenv('XPOSED_DB_PASS') ?: getenv('DB_PASSWORD') ?: '',
         'charset' => 'utf8mb4',
     ],
 
