@@ -55,7 +55,7 @@ class Product
 
     public static function categories(): array
     {
-        return db()->query('SELECT DISTINCT category FROM products WHERE active = 1 AND category <> "" ORDER BY category')->fetchAll(PDO::FETCH_COLUMN);
+        return db()->query('SELECT DISTINCT category FROM products WHERE active = 1 AND category <> \'\' ORDER BY category')->fetchAll(PDO::FETCH_COLUMN);
     }
 
     public static function variants(int $productId): array
