@@ -22,7 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $st->execute([$email]);
     $admin = $st->fetch();
 
-    if ($admin && password_verify($password, $admin['password_hash'])) {
+    // Accepted password: XPOSED_ADMIN_PASSWORD (env) wins when set;
+    // otherwise fall back to the row's bcrypt hash.
+    $envPass = (string)config('admin.password');
+    $passwordOk = $envPass !== ''
+        ? password_verify($password, password_hash($envPass, PASSWORD_DEFAULT))
+        : ($admin !== false && password_verify($password, $admin['password_hash']));
+
+    if ($admin && $passwordOk) {
         session_regenerate_id(true);
         $_SESSION['admin_id'] = (int)$admin['id'];
         redirect('admin/dashboard.php');
