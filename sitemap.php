@@ -28,7 +28,7 @@ foreach ($static as $s) {
 // Blog posts (published only).
 $posts = db()->query(
     'SELECT slug, published_at FROM posts
-     WHERE status = "published" AND published_at <= NOW()
+     WHERE status = \'published\' AND published_at <= NOW()
      ORDER BY published_at DESC'
 )->fetchAll();
 foreach ($posts as $p) {

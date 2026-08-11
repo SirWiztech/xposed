@@ -12,7 +12,7 @@ class Order
 
         $st = $db->prepare(
             'INSERT INTO orders (order_ref, customer_id, email, total_cents, currency, status, payment_method)
-             VALUES (?, ?, ?, ?, ?, "pending", "pending")'
+             VALUES (?, ?, ?, ?, ?, \'pending\', \'pending\')'
         );
         $total = array_reduce($items, fn($sum, $i) => $sum + ((int)$i['unit_price'] * (int)$i['qty']), 0);
         $st->execute([$ref, $customerId, $items[0]['email'] ?? '', $total, $currency]);
@@ -55,7 +55,7 @@ class Order
 
     public static function setStripeSession(int $orderId, string $sessionId): void
     {
-        db()->prepare('UPDATE orders SET payment_method = "stripe", stripe_session_id = ? WHERE id = ?')
+        db()->prepare('UPDATE orders SET payment_method = \'stripe\', stripe_session_id = ? WHERE id = ?')
             ->execute([$sessionId, $orderId]);
     }
 

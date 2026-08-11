@@ -8,7 +8,7 @@ class Post
     public static function latest(int $limit = 3): array
     {
         $st = db()->prepare(
-            'SELECT * FROM posts WHERE status = "published" AND published_at <= NOW()
+            'SELECT * FROM posts WHERE status = \'published\' AND published_at <= NOW()
              ORDER BY published_at DESC LIMIT ?'
         );
         $st->execute([$limit]);
@@ -19,11 +19,11 @@ class Post
     {
         $offset = max(0, $page - 1) * $perPage;
         $total = (int)db()->query(
-            'SELECT COUNT(*) FROM posts WHERE status = "published" AND published_at <= NOW()'
+            'SELECT COUNT(*) FROM posts WHERE status = \'published\' AND published_at <= NOW()'
         )->fetchColumn();
 
         $st = db()->prepare(
-            'SELECT * FROM posts WHERE status = "published" AND published_at <= NOW()
+            'SELECT * FROM posts WHERE status = \'published\' AND published_at <= NOW()
              ORDER BY published_at DESC LIMIT ? OFFSET ?'
         );
         $st->execute([$perPage, $offset]);
@@ -40,7 +40,7 @@ class Post
     public static function findBySlug(string $slug): ?array
     {
         $st = db()->prepare(
-            'SELECT * FROM posts WHERE slug = ? AND status = "published" AND published_at <= NOW()'
+            'SELECT * FROM posts WHERE slug = ? AND status = \'published\' AND published_at <= NOW()'
         );
         $st->execute([$slug]);
         $row = $st->fetch();
